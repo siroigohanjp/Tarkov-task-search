@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarkov タスク検索</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Escape from Tarkov タスク検索</h1>
+
+    <section class="panel">
+      <h2>フォルダ監視</h2>
+      <p>「フォルダを選択」ボタンでスクショ保存先フォルダを選び、追加された画像を自動チェックします。</p>
+      <button id="selectFolder">フォルダを選択</button>
+      <button id="refreshFolder" disabled>手動で再スキャン</button>
+      <p id="watchStatus">フォルダがまだ選択されていません。</p>
+    </section>
+
+    <section class="panel">
+      <h2>手動アップロード</h2>
+      <input type="file" id="uploadInput" accept="image/*" multiple />
+      <button id="uploadButton">解析する</button>
+      <p class="hint">複数ファイルを選択できます。</p>
+    </section>
+
+    <section class="panel">
+      <h2>検索対象プレビュー</h2>
+      <div id="previewArea" class="preview-area">
+        <p>検索する赤い範囲のプレビューがここに表示されます。</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>検出結果</h2>
+      <div id="statusLog" class="log"></div>
+      <div id="taskResults"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.3/dist/tesseract.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
