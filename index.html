@@ -10,20 +10,22 @@
   <main>
     <h1>Escape from Tarkov タスク検索</h1>
 
-    <section class="panel">
-      <h2>フォルダ監視</h2>
-      <p>「フォルダを選択」ボタンでスクショ保存先フォルダを選び、追加された画像を自動チェックします。</p>
-      <button id="selectFolder">フォルダを選択</button>
-      <button id="refreshFolder" disabled>手動で再スキャン</button>
-      <p id="watchStatus">フォルダがまだ選択されていません。</p>
-    </section>
+    <div class="half-width-container">
+      <section class="panel">
+        <h2>フォルダ監視</h2>
+        <p>「フォルダを選択」ボタンでスクショ保存先フォルダを選び、追加された画像を自動チェックします。</p>
+        <button id="selectFolder">フォルダを選択</button>
+        <button id="refreshFolder" disabled>手動で再スキャン</button>
+        <p id="watchStatus">フォルダがまだ選択されていません。</p>
+      </section>
 
-    <section class="panel">
-      <h2>手動アップロード</h2>
-      <input type="file" id="uploadInput" accept="image/*" multiple />
-      <button id="uploadButton">解析する</button>
-      <p class="hint">複数ファイルを選択できます。</p>
-    </section>
+      <section class="panel">
+        <h2>手動アップロード</h2>
+        <input type="file" id="uploadInput" accept="image/*" multiple />
+        <button id="uploadButton">解析する</button>
+        <p class="hint">複数ファイルを選択できます。</p>
+      </section>
+    </div>
 
     <section class="panel">
       <h2>検索対象プレビュー</h2>
