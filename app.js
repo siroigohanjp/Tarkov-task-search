@@ -83,12 +83,12 @@ function extractCandidates(fullText, words) {
       if (group.length) candidates.push(group.map(x=>x.txt).join(' '));
     }
 
-    // 行の結合: ハイフンで終わる行、または明らかに短い行を次の行と結合
+    // 行の結合: 次の行が短ければ前の行に結合
     const merged = [];
     for (let i = 0; i < candidates.length; i++) {
       const a = candidates[i];
       const b = candidates[i + 1];
-      if (b && (a.endsWith('-') || a.endsWith(' -') || (a.length <= 10 && b.length <= 30))) {
+      if (b && (b.length <= 15 || b.endsWith('-') || b.endsWith(' -'))) {
         merged.push((a + ' ' + b).trim());
         i++;
       } else {
