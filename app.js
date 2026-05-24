@@ -83,8 +83,21 @@ function extractCandidates(fullText, words) {
       if (group.length) candidates.push(group.map(x=>x.txt).join(' '));
     }
 
+    // 行の結合: ハイフンで終わる行、または明らかに短い行を次の行と結合
+    const merged = [];
+    for (let i = 0; i < candidates.length; i++) {
+      const a = candidates[i];
+      const b = candidates[i + 1];
+      if (b && (a.endsWith('-') || a.endsWith(' -') || (a.length <= 10 && b.length <= 30))) {
+        merged.push((a + ' ' + b).trim());
+        i++;
+      } else {
+        merged.push(a);
+      }
+    }
+
     const ignorePattern = /^(LEVEL|EXP|RANK|TIME|REWARD|PRICE|WEIGHT|ARMOR|WEAPON|HP|MP|DUR)$/i;
-    return [...new Set(candidates.map(s=>s.trim()).filter(s=>s.length>2 && !ignorePattern.test(s)))].slice(0, 10);
+    return [...new Set(merged.map(s=>s.trim()).filter(s=>s.length>2 && !ignorePattern.test(s)))].slice(0, 10);
   }
 
   // 位置情報がなければ旧来のテキストベース処理にフォールバック
