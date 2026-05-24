@@ -266,7 +266,7 @@ async function scanDirectory() {
 
 async function selectFolder() {
   try {
-    directoryHandle = await window.showDirectoryPicker();
+    directoryHandle = await window.showDirectoryPicker({ id: "tarkov-screenshots" });
     knownFiles.clear();
     watchStatus.textContent = `監視フォルダ: ${directoryHandle.name}`;
     refreshFolderButton.disabled = false;
