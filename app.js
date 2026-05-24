@@ -2,6 +2,8 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadButton = document.getElementById('uploadButton');
 const selectFolderButton = document.getElementById('selectFolder');
 const refreshFolderButton = document.getElementById('refreshFolder');
+const openDefaultPathButton = document.getElementById('openDefaultPath');
+const defaultPathInput = document.getElementById('defaultPath');
 const watchStatus = document.getElementById('watchStatus');
 const previewArea = document.getElementById('previewArea');
 const statusLog = document.getElementById('statusLog');
@@ -276,8 +278,30 @@ async function selectFolder() {
   }
 }
 
+async function openDefaultPath() {
+  const path = defaultPathInput.value.trim();
+  if (!path) {
+    logMessage('パスを入力してください。', 'warning');
+    return;
+  }
+  try {
+    const rootHandle = await window.showDirectoryPicker();
+    const dirHandle = await rootHandle.getDirectoryHandle(path, { createDirectory: false });
+    directoryHandle = dirHandle;
+    knownFiles.clear();
+    watchStatus.textContent = `監視フォルダ: ${path}`;
+    refreshFolderButton.disabled = false;
+    await scanDirectory();
+    if (watcherInterval) clearInterval(watcherInterval);
+    watcherInterval = setInterval(scanDirectory, 5000);
+  } catch (error) {
+    logMessage(`フォルダのオープンに失敗しました: ${error.message}`, 'error');
+  }
+}
+
 selectFolderButton.addEventListener('click', selectFolder);
 refreshFolderButton.addEventListener('click', scanDirectory);
+openDefaultPathButton.addEventListener('click', openDefaultPath);
 
 uploadButton.addEventListener('click', async () => {
   if (!uploadInput.files.length) {
