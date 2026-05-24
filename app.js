@@ -2,8 +2,6 @@ const uploadInput = document.getElementById('uploadInput');
 const uploadButton = document.getElementById('uploadButton');
 const selectFolderButton = document.getElementById('selectFolder');
 const refreshFolderButton = document.getElementById('refreshFolder');
-const openDefaultPathButton = document.getElementById('openDefaultPath');
-const defaultPathInput = document.getElementById('defaultPath');
 const watchStatus = document.getElementById('watchStatus');
 const previewArea = document.getElementById('previewArea');
 const statusLog = document.getElementById('statusLog');
@@ -301,7 +299,6 @@ async function openDefaultPath() {
 
 selectFolderButton.addEventListener('click', selectFolder);
 refreshFolderButton.addEventListener('click', scanDirectory);
-openDefaultPathButton.addEventListener('click', openDefaultPath);
 
 uploadButton.addEventListener('click', async () => {
   if (!uploadInput.files.length) {
