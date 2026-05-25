@@ -47,7 +47,7 @@ function extractCandidates(fullText, words) {
       const hs = items.map(i => i.y1 - i.y0).sort((a,b)=>a-b);
       return hs[Math.floor(hs.length/2)] || 16;
     })();
-    const rowThresh = Math.max(8, medianH * 1.5);
+    const rowThresh = Math.max(8, medianH * 1.2);
 
     for (const it of items) {
       const row = rows.find(r => Math.abs(r.avgY - it.cy) <= rowThresh);
@@ -59,7 +59,7 @@ function extractCandidates(fullText, words) {
       }
     }
 
-    const candidates = [];
+    const rowsWithPos = [];
     for (const r of rows) {
       r.items.sort((a,b)=>a.cx-b.cx);
       // 横方向でギャップが大きければ別カラムとみなす
@@ -76,23 +76,23 @@ function extractCandidates(fullText, words) {
         if (gap <= gapThresh) {
           group.push(cur);
         } else {
-          candidates.push(group.map(x=>x.txt).join(' '));
+          rowsWithPos.push({ text: group.map(x=>x.txt).join(' '), avgY: r.avgY });
           group = [cur];
         }
       }
-      if (group.length) candidates.push(group.map(x=>x.txt).join(' '));
+      if (group.length) rowsWithPos.push({ text: group.map(x=>x.txt).join(' '), avgY: r.avgY });
     }
 
-    // 行の結合: ハイフンで終わる行、または短い1単語の行は前の行と結合
+    // Y座標が非常に近い行を結合（同じ行として扱う）
     const merged = [];
-    for (let i = 0; i < candidates.length; i++) {
-      const a = candidates[i];
-      const b = candidates[i + 1];
-      if (b && (a.endsWith('-') || a.endsWith(' -') || (b.trim().split(/\s+/).length === 1 && a.includes('Huntsman Path')))) {
-        merged.push((a + ' ' + b).trim());
+    for (let i = 0; i < rowsWithPos.length; i++) {
+      const a = rowsWithPos[i];
+      const b = rowsWithPos[i + 1];
+      if (b && Math.abs(a.avgY - b.avgY) <= medianH * 0.5) {
+        merged.push((a.text + ' ' + b.text).trim());
         i++;
       } else {
-        merged.push(a);
+        merged.push(a.text);
       }
     }
 
