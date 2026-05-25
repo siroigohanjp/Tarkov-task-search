@@ -88,7 +88,10 @@ function extractCandidates(fullText, words) {
     for (let i = 0; i < candidates.length; i++) {
       const a = candidates[i];
       const b = candidates[i + 1];
-      if (b && (a.endsWith('-') || a.endsWith(' -') || b.trim().startsWith('Path -'))) {
+      if (b && (a.includes('Huntsman') && b.trim().startsWith('Path -'))) {
+        merged.push((a + ' ' + b).trim());
+        i++;
+      } else if (b && (a.endsWith('-') || a.endsWith(' -'))) {
         merged.push((a + ' ' + b).trim());
         i++;
       } else {
@@ -96,8 +99,17 @@ function extractCandidates(fullText, words) {
       }
     }
 
+    // 正規化: The [name1] Huntsman Path - The [name2] Huntsman を The Huntsman Path - [name1] [name2] に変換
+    const normalized = merged.map(s => {
+      const match = s.match(/The\s+(\w+)\s+Huntsman\s+Path\s+-\s+The\s+(\w+)\s+Huntsman/);
+      if (match) {
+        return `The Huntsman Path - ${match[1]} ${match[2]}`;
+      }
+      return s;
+    });
+
     const ignorePattern = /^(LEVEL|EXP|RANK|TIME|REWARD|PRICE|WEIGHT|ARMOR|WEAPON|HP|MP|DUR)$/i;
-    return [...new Set(merged.map(s=>s.trim()).filter(s=>s.length>2 && !ignorePattern.test(s)))].slice(0, 10);
+    return [...new Set(normalized.map(s=>s.trim()).filter(s=>s.length>2 && !ignorePattern.test(s)))].slice(0, 10);
   }
 
   // 位置情報がなければ旧来のテキストベース処理にフォールバック
